@@ -134,6 +134,22 @@ export interface AnimeDetailResponse {
   data: Anime;
 }
 
+// Filter Types
+export type AnimeType = 'tv' | 'movie' | 'ova' | 'special' | 'ona' | 'music';
+export type AnimeStatus = 'airing' | 'complete' | 'upcoming';
+export type AnimeRating = 'g' | 'pg' | 'pg13' | 'r17' | 'r' | 'rx';
+export type SortOrder = 'asc' | 'desc';
+
+export interface AnimeFilters {
+  type: AnimeType | null;
+  status: AnimeStatus | null;
+  rating: AnimeRating | null;
+  genres: number[];
+  minScore: number | null;
+  orderBy: string | null;
+  sort: SortOrder;
+}
+
 // Redux State Types
 export interface AnimeState {
   searchResults: Anime[];
@@ -143,4 +159,5 @@ export interface AnimeState {
   pagination: AnimePagination | null;
   searchQuery: string;
   currentPage: number;
+  filters: AnimeFilters;
 }

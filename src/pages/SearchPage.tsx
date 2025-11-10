@@ -1,37 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { fetchAnimeSearch, setSearchQuery, setCurrentPage } from '../store/animeSlice';
+import { fetchAnimeSearch, setSearchQuery, setCurrentPage, clearSearchResults } from '../store/animeSlice';
 import { useDebounce } from '../hooks/useDebounce';
 import { SearchBar } from '../components/SearchBar';
 import { AnimeCard } from '../components/AnimeCard';
 import { LoadingSkeleton } from '../components/LoadingSkeleton';
 import { Pagination } from '../components/Pagination';
 import { EmptyState } from '../components/EmptyState';
+import { FilterPanel } from '../components/FilterPanel';
+import { ScrollToTop } from '../components/ScrollToTop';
 
 export const SearchPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { searchResults, loading, error, pagination, currentPage } = useAppSelector(
+  const { searchResults, loading, error, pagination, currentPage, filters, searchQuery } = useAppSelector(
     (state) => state.anime
   );
 
-  const [localSearchQuery, setLocalSearchQuery] = useState('');
+  const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
   const debouncedSearchQuery = useDebounce(localSearchQuery, 250);
 
-  // Effect for debounced search
+  // Effect for debounced search - resets to page 1
   useEffect(() => {
     if (debouncedSearchQuery.trim()) {
       dispatch(setSearchQuery(debouncedSearchQuery));
       dispatch(setCurrentPage(1)); // Reset to page 1 on new search
-      dispatch(fetchAnimeSearch({ query: debouncedSearchQuery, page: 1 }));
+    } else {
+      // Clear search results when search query is empty
+      dispatch(clearSearchResults());
     }
   }, [debouncedSearchQuery, dispatch]);
 
-  // Effect for pagination
+  // Effect for filters changing - resets to page 1
   useEffect(() => {
-    if (debouncedSearchQuery.trim() && currentPage > 1) {
-      dispatch(fetchAnimeSearch({ query: debouncedSearchQuery, page: currentPage }));
+    if (debouncedSearchQuery.trim()) {
+      dispatch(setCurrentPage(1));
     }
-  }, [currentPage, debouncedSearchQuery, dispatch]);
+  }, [filters, debouncedSearchQuery, dispatch]);
+
+  // Effect for fetching - handles both new search and pagination
+  useEffect(() => {
+    if (debouncedSearchQuery.trim()) {
+      dispatch(fetchAnimeSearch({ query: debouncedSearchQuery, page: currentPage, filters }));
+    }
+  }, [currentPage, debouncedSearchQuery, filters, dispatch]);
 
   const handlePageChange = (page: number) => {
     dispatch(setCurrentPage(page));
@@ -60,6 +71,8 @@ export const SearchPage: React.FC = () => {
           placeholder="Search for anime (e.g., Naruto, One Piece)..."
         />
 
+        <FilterPanel />
+
         {error && (
           <div className="max-w-3xl mx-auto mb-8">
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
@@ -71,7 +84,7 @@ export const SearchPage: React.FC = () => {
 
         {loading && <LoadingSkeleton />}
 
-        {!loading && !error && searchResults.length > 0 && (
+        {!loading && !error && debouncedSearchQuery && searchResults.length > 0 && (
           <>
             <div className="mb-4 text-gray-600 text-center">
               Found {pagination?.items.total ?? 0} results
@@ -91,14 +104,16 @@ export const SearchPage: React.FC = () => {
           </>
         )}
 
-        {!loading && !error && searchResults.length === 0 && debouncedSearchQuery && (
+        {!loading && !error && debouncedSearchQuery && searchResults.length === 0 && (
           <EmptyState message="No anime found. Try a different search term." />
         )}
 
-        {!loading && !error && !debouncedSearchQuery && (
+        {!loading && !error && !debouncedSearchQuery && searchResults.length === 0 && (
           <EmptyState message="Start typing to search for anime..." />
         )}
       </div>
+
+      <ScrollToTop />
     </div>
   );
 };

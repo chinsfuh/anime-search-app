@@ -22,7 +22,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           className="w-full px-6 py-4 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all"
           autoFocus
         />
-        <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+        <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer">
           <svg
             className="w-6 h-6"
             fill="none"

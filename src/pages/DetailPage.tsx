@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchAnimeDetail, clearSelectedAnime } from '../store/animeSlice';
+import { ScrollToTop } from '../components/ScrollToTop';
 
 export const DetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -260,6 +261,8 @@ export const DetailPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <ScrollToTop />
     </div>
   );
 };
