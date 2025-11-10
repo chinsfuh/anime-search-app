@@ -9,7 +9,7 @@ interface SearchBarProps {
 export const SearchBar: React.FC<SearchBarProps> = ({
   value,
   onChange,
-  placeholder = 'Search for anime...'
+  placeholder = 'Search for anime...',
 }) => {
   return (
     <div className="w-full max-w-3xl mx-auto mb-8">
@@ -22,7 +22,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           className="w-full px-6 py-4 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all"
           autoFocus
         />
-        <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer">
+        {/* Search Icon */}
+        <div className="absolute right-10 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
           <svg
             className="w-6 h-6"
             fill="none"
@@ -37,6 +38,28 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             />
           </svg>
         </div>
+
+        {/* Clear (X) Icon */}
+        {value && (
+          <div
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+            onClick={() => onChange('')}
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </div>
+        )}
       </div>
     </div>
   );

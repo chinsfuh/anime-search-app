@@ -20,14 +20,16 @@ let searchCancelToken: CancelTokenSource | null = null;
 
 // Rate limiting tracking
 let lastRequestTime = 0;
-const MIN_REQUEST_INTERVAL = 350; // ~3 requests per second (conservative)
+const MIN_REQUEST_INTERVAL = 350; // ~3 requests per second
 
 /**
- * Handle API errors with specific messages based on status codes
+ * Handle API errors with user-friendly messages
  */
 const handleApiError = (error: unknown): never => {
   if (axios.isCancel(error)) {
-    throw new Error("The request was cancelled. Please try again if needed.");
+    // Cancellation is not an error for the user
+    console.log("Search request cancelled:", error.message);
+    throw error; // optional: could return empty results instead
   }
 
   if (axios.isAxiosError(error)) {
@@ -53,7 +55,7 @@ const handleApiError = (error: unknown): never => {
 
       case 429:
         throw new Error(
-          "You’re searching too quickly! Please wait a few seconds before trying again."
+          "You're searching too quickly! Please wait a few seconds before trying again."
         );
 
       case 500:
@@ -76,6 +78,8 @@ const handleApiError = (error: unknown): never => {
         );
     }
   }
+
+  if (error instanceof Error) throw error;
 
   throw new Error(
     "An unexpected error occurred. Please refresh the page or try again later."
@@ -110,12 +114,12 @@ export const searchAnime = async (
   // Cancel previous request if exists (race condition prevention)
   if (searchCancelToken) {
     searchCancelToken.cancel("New search request initiated");
+    searchCancelToken = null;
   }
 
-  // Create new cancel token
-  searchCancelToken = axios.CancelToken.source();
+  const currentCancelToken = axios.CancelToken.source();
+  searchCancelToken = currentCancelToken;
 
-  // Enforce rate limiting
   await enforceRateLimit();
 
   // Build query parameters
@@ -125,68 +129,58 @@ export const searchAnime = async (
     limit: 25,
   };
 
-  // Add filters if provided
   if (filters) {
-    if (filters.type) {
-      params["type"] = filters.type;
-    }
-    if (filters.status) {
-      params["status"] = filters.status;
-    }
-    if (filters.rating) {
-      params["rating"] = filters.rating;
-    }
-    if (filters.genres.length > 0) {
-      params["genres"] = filters.genres.join(",");
-    }
-    if (filters.minScore !== null) {
-      params["min_score"] = filters.minScore;
-    }
-    if (filters.orderBy) {
-      params["order_by"] = filters.orderBy;
-    }
+    if (filters.type) params["type"] = filters.type;
+    if (filters.status) params["status"] = filters.status;
+    if (filters.rating) params["rating"] = filters.rating;
+    if (filters.genres.length > 0) params["genres"] = filters.genres.join(",");
+    if (filters.minScore !== null) params["min_score"] = filters.minScore;
+    if (filters.orderBy) params["order_by"] = filters.orderBy;
     params["sort"] = filters.sort;
   }
 
   try {
     const response = await apiClient.get<AnimeSearchResponse>("/anime", {
       params,
-      cancelToken: searchCancelToken.token,
+      cancelToken: currentCancelToken.token,
     });
 
-    // Validate response structure
     if (!response.data || !Array.isArray(response.data.data)) {
+      if (searchCancelToken === currentCancelToken) searchCancelToken = null;
       throw new Error("Invalid response format from server");
     }
 
-    searchCancelToken = null;
+    if (searchCancelToken === currentCancelToken) searchCancelToken = null;
     return response.data;
   } catch (error) {
-    searchCancelToken = null;
+    if (searchCancelToken === currentCancelToken) searchCancelToken = null;
+
+    // **Ignore cancelled requests for the user**
+    if (axios.isCancel(error)) {
+      console.log("Request cancelled:", error.message);
+      return {
+        data: [],
+        pagination: { last_visible_page: 1, current_page: page, has_next_page: false },
+      } as AnimeSearchResponse;
+    }
+
     return handleApiError(error);
   }
 };
 
 /**
  * Get anime details by ID
- * Implements rate limiting to comply with Jikan API limits
  */
 export const getAnimeById = async (
   id: number
 ): Promise<AnimeDetailResponse> => {
-  // Enforce rate limiting
   await enforceRateLimit();
 
   try {
-    const response = await apiClient.get<AnimeDetailResponse>(
-      `/anime/${id}/full`
-    );
-
-    // Validate response structure
+    const response = await apiClient.get<AnimeDetailResponse>(`/anime/${id}/full`);
     if (!response.data || !response.data.data) {
       throw new Error("Invalid response format from server");
     }
-
     return response.data;
   } catch (error) {
     return handleApiError(error);
