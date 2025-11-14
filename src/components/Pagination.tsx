@@ -39,7 +39,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors"
+        className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
       >
         Previous
       </button>
@@ -48,11 +48,11 @@ export const Pagination: React.FC<PaginationProps> = ({
         <>
           <button
             onClick={() => onPageChange(1)}
-            className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors"
+            className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
             1
           </button>
-          {pages[0] > 2 && <span className="px-2">...</span>}
+          {pages[0] > 2 && <span className="px-2 text-gray-600 dark:text-gray-400">...</span>}
         </>
       )}
 
@@ -62,22 +62,22 @@ export const Pagination: React.FC<PaginationProps> = ({
           onClick={() => onPageChange(page)}
           className={`px-4 py-2 rounded-lg border transition-colors ${
             currentPage === page
-              ? 'bg-primary-600 text-white border-primary-600'
-              : 'border-gray-300 hover:bg-gray-100'
+              ? 'bg-primary-600 dark:bg-primary-500 text-white border-primary-600 dark:border-primary-500'
+              : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
           }`}
         >
           {page}
         </button>
       ))}
 
-      {pages[pages.length - 1] && pages[pages.length - 1] < last_visible_page && (
+      {pages.length > 0 && pages[pages.length - 1]! < last_visible_page && (
         <>
-          {pages[pages.length - 1] < last_visible_page - 1 && (
-            <span className="px-2">...</span>
+          {pages[pages.length - 1]! < last_visible_page - 1 && (
+            <span className="px-2 text-gray-600 dark:text-gray-400">...</span>
           )}
           <button
             onClick={() => onPageChange(last_visible_page)}
-            className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors"
+            className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
             {last_visible_page}
           </button>
@@ -87,7 +87,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={!has_next_page}
-        className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors"
+        className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
       >
         Next
       </button>

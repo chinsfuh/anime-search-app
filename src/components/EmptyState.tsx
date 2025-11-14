@@ -9,7 +9,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 }) => {
   return (
     <div className="flex flex-col items-center justify-center py-16 px-4">
-      <div className="text-gray-400 mb-4">
+      <div className="text-gray-400 dark:text-gray-600 mb-4">
         <svg
           className="w-24 h-24"
           fill="none"
@@ -24,7 +24,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           />
         </svg>
       </div>
-      <p className="text-xl text-gray-600 text-center">{message}</p>
+      <p className="text-xl text-gray-600 dark:text-gray-400 text-center">{message}</p>
     </div>
   );
 };

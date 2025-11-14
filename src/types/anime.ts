@@ -150,6 +150,27 @@ export interface AnimeFilters {
   sort: SortOrder;
 }
 
+// Season Selection Type
+export interface SelectedSeason {
+  year: number;
+  season: string; // winter, spring, summer, fall
+}
+
+// Season Data for Navigation Menu
+export interface SeasonData {
+  year: number;
+  season: string;
+}
+
+export type SeasonType = 'winter' | 'spring' | 'summer' | 'fall';
+
+export interface SeasonsByType {
+  winter: SeasonData[];
+  spring: SeasonData[];
+  summer: SeasonData[];
+  fall: SeasonData[];
+}
+
 // Redux State Types
 export interface AnimeState {
   searchResults: Anime[];
@@ -160,4 +181,7 @@ export interface AnimeState {
   searchQuery: string;
   currentPage: number;
   filters: AnimeFilters;
+  selectedSeason: SelectedSeason | null;
+  topAnime: Anime[];
+  seasonsByType: SeasonsByType;
 }

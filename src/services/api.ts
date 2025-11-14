@@ -160,7 +160,12 @@ export const searchAnime = async (
       console.log("Request cancelled:", error.message);
       return {
         data: [],
-        pagination: { last_visible_page: 1, current_page: page, has_next_page: false },
+        pagination: {
+          last_visible_page: 1,
+          current_page: page,
+          has_next_page: false,
+          items: { count: 0, total: 0, per_page: 25 },
+        },
       } as AnimeSearchResponse;
     }
 
@@ -194,5 +199,120 @@ export const cancelSearch = (): void => {
   if (searchCancelToken) {
     searchCancelToken.cancel("Search cancelled by user");
     searchCancelToken = null;
+  }
+};
+
+/**
+ * Get top anime (trending/most popular)
+ */
+export const getTopAnime = async (
+  limit: number = 25,
+  page: number = 1
+): Promise<AnimeSearchResponse> => {
+  await enforceRateLimit();
+
+  try {
+    const response = await apiClient.get<AnimeSearchResponse>("/top/anime", {
+      params: { limit, page },
+    });
+    if (!response.data || !Array.isArray(response.data.data)) {
+      throw new Error("Invalid response format from server");
+    }
+    return response.data;
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
+/**
+ * Get current season anime
+ */
+export const getCurrentSeasonAnime = async (
+  page: number = 1
+): Promise<AnimeSearchResponse> => {
+  await enforceRateLimit();
+
+  try {
+    const response = await apiClient.get<AnimeSearchResponse>("/seasons/now", {
+      params: { page, limit: 25 },
+    });
+    if (!response.data || !Array.isArray(response.data.data)) {
+      throw new Error("Invalid response format from server");
+    }
+    return response.data;
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
+/**
+ * Get anime by specific season and year
+ */
+export const getSeasonAnime = async (
+  year: number,
+  season: string,
+  page: number = 1
+): Promise<AnimeSearchResponse> => {
+  await enforceRateLimit();
+
+  try {
+    const response = await apiClient.get<AnimeSearchResponse>(
+      `/seasons/${year}/${season}`,
+      {
+        params: { page, limit: 25 },
+      }
+    );
+    if (!response.data || !Array.isArray(response.data.data)) {
+      throw new Error("Invalid response format from server");
+    }
+    return response.data;
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
+/**
+ * Get anime recommendations for a specific anime
+ */
+export const getAnimeRecommendations = async (
+  id: number
+): Promise<AnimeSearchResponse> => {
+  await enforceRateLimit();
+
+  try {
+    const response = await apiClient.get<any>(`/anime/${id}/recommendations`);
+    if (!response.data || !Array.isArray(response.data.data)) {
+      throw new Error("Invalid response format from server");
+    }
+    // Transform recommendations to match AnimeSearchResponse format
+    const recommendations = response.data.data.map((rec: any) => rec.entry).slice(0, 10);
+    return {
+      data: recommendations,
+      pagination: { last_visible_page: 1, current_page: 1, has_next_page: false },
+    } as AnimeSearchResponse;
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
+/**
+ * Get available seasons (years and seasons)
+ */
+export interface SeasonInfo {
+  year: number;
+  seasons: string[];
+}
+
+export const getAvailableSeasons = async (): Promise<SeasonInfo[]> => {
+  await enforceRateLimit();
+
+  try {
+    const response = await apiClient.get<{ data: SeasonInfo[] }>("/seasons");
+    if (!response.data || !Array.isArray(response.data.data)) {
+      throw new Error("Invalid response format from server");
+    }
+    return response.data.data;
+  } catch (error) {
+    return handleApiError(error);
   }
 };

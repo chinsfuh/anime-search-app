@@ -101,11 +101,11 @@ export const FilterPanel: React.FC = () => {
     filters.minScore !== null;
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 transition-colors duration-200">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
           <svg
-            className="w-6 h-6 text-primary-600"
+            className="w-6 h-6 text-primary-600 dark:text-primary-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -123,14 +123,14 @@ export const FilterPanel: React.FC = () => {
           {hasActiveFilters && (
             <button
               onClick={handleClearAll}
-              className="text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
+              className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium transition-colors"
             >
               Clear All
             </button>
           )}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-gray-600 hover:text-gray-800 transition-colors"
+            className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
           >
             <svg
               className={`w-5 h-5 transform transition-transform ${isExpanded ? 'rotate-180' : ''}`}
@@ -148,7 +148,7 @@ export const FilterPanel: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Type Filter */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Type</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Type</label>
             <div className="space-y-2">
               {TYPE_OPTIONS.map((option) => {
                 const count = filterCounts.types[option.value] || 0;
@@ -158,15 +158,15 @@ export const FilterPanel: React.FC = () => {
                     onClick={() => handleTypeChange(filters.type === option.value ? null : option.value as AnimeType)}
                     className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                       filters.type === option.value
-                        ? 'bg-primary-600 text-white shadow-md'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        ? 'bg-primary-600 dark:bg-primary-500 text-white shadow-md'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                     }`}
                   >
                     <span className="flex justify-between items-center">
                       <span>{option.label}</span>
                       {count > 0 && (
                         <span className={`text-xs font-semibold ${
-                          filters.type === option.value ? 'text-white' : 'text-gray-500'
+                          filters.type === option.value ? 'text-white' : 'text-gray-500 dark:text-gray-400'
                         }`}>
                           ({count})
                         </span>
@@ -180,7 +180,7 @@ export const FilterPanel: React.FC = () => {
 
           {/* Status Filter */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Status</label>
             <div className="space-y-2">
               {STATUS_OPTIONS.map((option) => {
                 const count = filterCounts.statuses[option.value] || 0;
@@ -190,15 +190,15 @@ export const FilterPanel: React.FC = () => {
                     onClick={() => handleStatusChange(filters.status === option.value ? null : option.value as AnimeStatus)}
                     className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                       filters.status === option.value
-                        ? 'bg-primary-600 text-white shadow-md'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        ? 'bg-primary-600 dark:bg-primary-500 text-white shadow-md'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                     }`}
                   >
                     <span className="flex justify-between items-center">
                       <span>{option.label}</span>
                       {count > 0 && (
                         <span className={`text-xs font-semibold ${
-                          filters.status === option.value ? 'text-white' : 'text-gray-500'
+                          filters.status === option.value ? 'text-white' : 'text-gray-500 dark:text-gray-400'
                         }`}>
                           ({count})
                         </span>
@@ -212,7 +212,7 @@ export const FilterPanel: React.FC = () => {
 
           {/* Rating Filter */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Rating</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Rating</label>
             <div className="space-y-2">
               {RATING_OPTIONS.map((option) => {
                 const count = filterCounts.ratings[option.value] || 0;
@@ -222,15 +222,15 @@ export const FilterPanel: React.FC = () => {
                     onClick={() => handleRatingChange(filters.rating === option.value ? null : option.value as AnimeRating)}
                     className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                       filters.rating === option.value
-                        ? 'bg-primary-600 text-white shadow-md'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        ? 'bg-primary-600 dark:bg-primary-500 text-white shadow-md'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                     }`}
                   >
                     <span className="flex justify-between items-center">
                       <span>{option.label}</span>
                       {count > 0 && (
                         <span className={`text-xs font-semibold ${
-                          filters.rating === option.value ? 'text-white' : 'text-gray-500'
+                          filters.rating === option.value ? 'text-white' : 'text-gray-500 dark:text-gray-400'
                         }`}>
                           ({count})
                         </span>
@@ -244,7 +244,7 @@ export const FilterPanel: React.FC = () => {
 
           {/* Score Filter */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Minimum Score</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Minimum Score</label>
             <div className="space-y-2">
               {SCORE_OPTIONS.map((option) => {
                 const count = option.value === 0 ? searchResults.length : (filterCounts.scores[option.value] || 0);
@@ -254,8 +254,8 @@ export const FilterPanel: React.FC = () => {
                     onClick={() => handleScoreChange(option.value === 0 ? null : option.value)}
                     className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
                       filters.minScore === option.value || (filters.minScore === null && option.value === 0)
-                        ? 'bg-primary-600 text-white shadow-md'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        ? 'bg-primary-600 dark:bg-primary-500 text-white shadow-md'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                     }`}
                   >
                     <span className="flex justify-between items-center">
@@ -264,7 +264,7 @@ export const FilterPanel: React.FC = () => {
                         <span className={`text-xs font-semibold ${
                           filters.minScore === option.value || (filters.minScore === null && option.value === 0)
                             ? 'text-white'
-                            : 'text-gray-500'
+                            : 'text-gray-500 dark:text-gray-400'
                         }`}>
                           ({count})
                         </span>
@@ -280,8 +280,8 @@ export const FilterPanel: React.FC = () => {
 
       {/* Genres Section - Always visible, full width */}
       {isExpanded && (
-        <div className="mt-6 pt-6 border-t border-gray-200">
-          <label className="block text-sm font-semibold text-gray-700 mb-3">
+        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
             Genres {filters.genres.length > 0 && `(${filters.genres.length} selected)`}
           </label>
           <div className="flex flex-wrap gap-2">
@@ -293,14 +293,14 @@ export const FilterPanel: React.FC = () => {
                   onClick={() => handleGenreToggle(genre.id)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                     filters.genres.includes(genre.id)
-                      ? 'bg-primary-600 text-white shadow-md transform scale-105'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-sm'
+                      ? 'bg-primary-600 dark:bg-primary-500 text-white shadow-md transform scale-105'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 hover:shadow-sm'
                   }`}
                 >
                   {genre.name}
                   {count > 0 && (
                     <span className={`ml-1.5 text-xs ${
-                      filters.genres.includes(genre.id) ? 'text-white' : 'text-gray-500'
+                      filters.genres.includes(genre.id) ? 'text-white' : 'text-gray-500 dark:text-gray-400'
                     }`}>
                       ({count})
                     </span>

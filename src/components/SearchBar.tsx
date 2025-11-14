@@ -19,11 +19,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full px-6 py-4 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all"
+          className="w-full px-6 py-4 text-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:border-primary-500 dark:focus:border-primary-400 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900 transition-all placeholder-gray-400 dark:placeholder-gray-500"
           autoFocus
         />
         {/* Search Icon */}
-        <div className="absolute right-10 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+        <div className="absolute right-10 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none">
           <svg
             className="w-6 h-6"
             fill="none"
@@ -42,7 +42,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         {/* Clear (X) Icon */}
         {value && (
           <div
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer transition-colors"
             onClick={() => onChange('')}
           >
             <svg

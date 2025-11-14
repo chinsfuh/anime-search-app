@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <rect width="24" height="24" rx="4" fill="#2563eb"/>
+  <g transform="translate(3, 4)">
+    <!-- TV/Screen -->
+    <path d="M15 0H3C1.9 0 1 .9 1 2v10c0 1.1.9 2 2 2h4v1.5h4V14h4c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2zm0 12H3V2h12v10z" fill="white"/>
+    <!-- Play button -->
+    <path d="M7 4.5v5l4-2.5z" fill="white"/>
+    <!-- Star accent -->
+    <circle cx="15" cy="1" r="1.5" fill="#fbbf24"/>
+  </g>
+</svg>

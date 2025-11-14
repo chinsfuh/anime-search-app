@@ -6,15 +6,15 @@ export const LoadingSkeleton: React.FC = () => {
       {Array.from({ length: 10 }).map((_, index) => (
         <div
           key={index}
-          className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse"
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden animate-pulse"
         >
-          <div className="relative pb-[140%] bg-gray-300"></div>
+          <div className="relative pb-[140%] bg-gray-300 dark:bg-gray-700"></div>
           <div className="p-4">
-            <div className="h-4 bg-gray-300 rounded mb-2"></div>
-            <div className="h-4 bg-gray-300 rounded w-3/4 mb-3"></div>
+            <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded mb-2"></div>
+            <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4 mb-3"></div>
             <div className="flex justify-between">
-              <div className="h-3 bg-gray-200 rounded w-1/3"></div>
-              <div className="h-3 bg-gray-200 rounded w-1/4"></div>
+              <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/3"></div>
+              <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/4"></div>
             </div>
           </div>
         </div>
